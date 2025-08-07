@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Bio-Data Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            opacity: 0;
+            animation: slideIn 0.8s forwards;
+        }
+        input, textarea {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.8s forwards;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+        input:focus, textarea:focus {
+            border-color: #ff6ec4;
+            box-shadow: 0 0 8px rgba(255, 110, 196, 0.6);
+            transform: scale(1.02);
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background: linear-gradient(45deg, #ff6ec4, #7873f5);
+            box-shadow: 0 0 15px rgba(255, 110, 196, 0.7);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+  <h1>Welcome to Our Company</h1>
+  <form id="biodataForm" method="POST">
+    <label>Full Name:</label>
+    <input type="text" name="name" required><br><br>
+
+    <label>Date of Birth:</label>
+    <input type="date" name="dob" required><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" required><br><br>
+
+    <label>Phone:</label>
+    <input type="tel" name="phone" required><br><br>
+
+    <label>Address:</label>
+    <textarea name="address" required></textarea><br><br>
+
+    <label>Education:</label>
+    <input type="text" name="education" required><br><br>
+
+    <label>Skills:</label>
+    <textarea name="skills" required></textarea><br><br>
+
+    <label>Experience (Years):</label>
+    <input type="number" name="experience" required><br><br>
+
+    <label>Expected Salary:</label>
+    <input type="text" name="salary" required><br><br>
+
+    <label>Position Applied For:</label>
+    <input type="text" name="position" required><br><br>
+
+    <input type="submit" value="Submit Bio-Data">
+  </form>
+</div>
+
+<script>
+document.getElementById("biodataForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const formData = Object.fromEntries(new FormData(this).entries());
+
+  try {
+    let res = await fetch("/send-email/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    let data = await res.json();
+    if (res.ok) {
+      alert(data.message || "Form submitted successfully! Check your email for confirmation.");
+    } else {
+      alert(data.message || "Something went wrong. Please try again.");
+    }
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+});
+</script>
+</body>
+</html>
